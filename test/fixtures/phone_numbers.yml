@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  contect_id: 1
+  number: 1
+
+two:
+  contect_id: 1
+  number: 1
