@@ -61,6 +61,28 @@ class ContactsController < ApplicationController
     redirect_to contacts_path
   end
 
+  def download
+    @contacts = request.env['omnicontacts.contacts']
+    count = 0
+    if @contacts.present? 
+      @contacts.each do |contact|
+        contact = current_user.contacts.new(name: contact[:name], address: contact[:addresses], email: contact[:email], phone_number: contact[:phone_number])
+        if contact.save
+          count +=1
+        end
+      end
+      flash[:notice]= "#{count} Contact created successfully"
+      redirect_to contacts_path
+    else
+      flash[:notice]= " unable to import contacts"
+      redirect_to contacts_path
+    end
+
+    # respond_to do |format|
+    #   format.html
+    # end
+  end
+
   private
 
     def contact_params
