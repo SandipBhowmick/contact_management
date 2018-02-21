@@ -55,6 +55,7 @@ end
 
 gem 'devise'
 gem 'pg_search'
-gem 'oauth2'
+gem "omnicontacts"
 
+gem "thin"
 
