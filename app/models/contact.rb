@@ -7,8 +7,8 @@ class Contact < ActiveRecord::Base
   after_find :get_phone_number
   after_save :save_phone_numbers
 
-  validates :email, presence: true, format: Devise.email_regexp
-  validates_presence_of :name, :address
+  # validates :email, presence: true, format: Devise.email_regexp
+  validates_presence_of :name
   validate :phone_number_value
 
   include PgSearch
@@ -28,10 +28,15 @@ class Contact < ActiveRecord::Base
   # end
 
   def phone_number_value
+    # byebug
+
     if self.phone_number.present?
       numbers_array = self.phone_number.split(",")
-      numbers_array.each do |nn|      
+      numbers_array.each do |nn|
+      nn = nn.gsub("-","").gsub("+91","").gsub(" ","")      
+      # byebug
         if nn.to_i.to_s.length != 10
+          # byebug
           self.errors[:phone_number]<< "must be 10 digit number"
         end      
       end
@@ -60,10 +65,14 @@ class Contact < ActiveRecord::Base
   end  
 
     def save_phone_numbers
+        # byebug
       if self.phone_number.present?
+       # byebug  
         numbers_array = self.phone_number.split(",")
         self.phone_numbers.destroy_all
+        
         numbers_array.each do |n|
+          n = n.gsub("-","").gsub("+91","").gsub("","").to_i
          new_number = PhoneNumber.new(contact_id: id, number: n)
          new_number.save()
         end

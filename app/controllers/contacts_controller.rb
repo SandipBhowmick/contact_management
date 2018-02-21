@@ -64,9 +64,14 @@ class ContactsController < ApplicationController
   def download
     @contacts = request.env['omnicontacts.contacts']
     count = 0
+     # byebug
     if @contacts.present? 
       @contacts.each do |contact|
-        contact = current_user.contacts.new(name: contact[:name], address: contact[:addresses], email: contact[:email], phone_number: contact[:phone_number])
+        # byebug
+        # if contact.present?
+        #  byebug
+        # end 
+        contact = current_user.contacts.new(name: contact[:name], address: contact[:addresses], email: contact[:email], phone_number: contact[:phone_numbers].map{|y| y[:number]}.join(","))
         if contact.save
           count +=1
         end
